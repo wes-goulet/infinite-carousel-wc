@@ -2,7 +2,7 @@
 
 # infinite-carousel-wc
 
-A small, infinite carousel Web Component built with modern CSS and just a little Javascript
+An infinite carousel Web Component built with modern CSS and just a little Javascript
 
 ![infinite-carousel-wc demo](demo.gif)
 
