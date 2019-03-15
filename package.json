@@ -1,0 +1,53 @@
+{
+  "name": "infinite-carousel-wc",
+  "version": "0.0.1",
+  "description": "A small, infinite carousel Web Component built with modern CSS and just a little Javascript",
+  "keywords": [
+    "web component",
+    "carousel",
+    "slider",
+    "infinite",
+    "infinite-carousel",
+    "slideshow",
+    "web-component",
+    "custom-element"
+  ],
+  "main": "dist/infinite-carousel-wc.js",
+  "umd:main": "dist/infinite-carousel-wc.umd.js",
+  "module": "dist/infinite-carousel-wc.mjs",
+  "source": "lib/infinite-carousel-wc.ts",
+  "types": "dist/infinite-carousel-wc.d.ts",
+  "scripts": {
+    "build": "rollup -c && cp ./dist/infinite-carousel-wc.js ./example/",
+    "rollup-watch": "rollup -c --watch",
+    "serve": "live-server ./example",
+    "copy-watch": "onchange -v \"dist/infinite-carousel-wc.js\" -- cp ./dist/infinite-carousel-wc.js ./example/",
+    "start": "npm-run-all --parallel rollup-watch serve copy-watch",
+    "clean": "rm -rf dist",
+    "prepublish": "npm run build",
+    "gzip-check": "npx gzip-size-cli dist/infinite-carousel-wc.min.js"
+  },
+  "devDependencies": {
+    "autoprefixer": "^9.4.5",
+    "live-server": "^1.2.1",
+    "npm-run-all": "^4.1.5",
+    "onchange": "^5.2.0",
+    "rollup": "^1.1.0",
+    "rollup-plugin-postcss": "^1.6.3",
+    "rollup-plugin-string": "^2.0.2",
+    "rollup-plugin-terser": "^4.0.2",
+    "rollup-plugin-typescript2": "^0.19.0",
+    "tslint": "^5.12.1",
+    "typescript": "^3.2.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wes566/infinite-carousel-wc"
+  },
+  "author": "Wes Peter",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/wes566/infinite-carousel-wc"
+  },
+  "homepage": "https://github.com/wes566/infinite-carousel-wc"
+}
