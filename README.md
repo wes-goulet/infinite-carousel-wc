@@ -36,6 +36,30 @@ This custom element uses [CSS Scroll Snap](https://caniuse.com/#feat=css-snappoi
 
 ## API and Customization
 
+### Slots
+
+The infinite carousel works by laying out 3 slots, with slot names of `1`, `2`, and `3`. The slots will be re-ordered in a circular manner as the user swipes/scrolls.
+
+When inifinite-scroller-wc first renders it will show slot 1 as visible (called the "current" position). Slot 2 will be to the right (in the "next" position), and slot 3 will be to the left (in the "previous" position), like this:
+
+|     |     |     |
+| :-: | :-: | :-: |
+|  3  |  1  |  2  |
+
+When the user swipes/scrolls forward/next then some CSS will get added to the slots (technically to the slot's parents which are encapsulated in the shadow DOM) to re-order them. After 1 swipe/scroll it will look like this:
+
+|     |     |     |
+| :-: | :-: | :-: |
+|  1  |  2  |  3  |
+
+Another swipe forward/next would produce:
+
+|     |     |     |
+| :-: | :-: | :-: |
+|  2  |  3  |  1  |
+
+The circular re-ordering allows the user to swipe/scroll "infinitely". It is up to the consuming code to listen for the [`slot-order-changing` event](#events). For an example of listening to the event and updating the slot contents [take a look at index.html](./example/index.html#331).
+
 ### Attributes/Properties
 
 - `lock`
