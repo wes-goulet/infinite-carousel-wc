@@ -11,6 +11,11 @@
       modern CSS and just a little Javascript
     </title>
     <script src="https://polyfill.io/v3/polyfill.min.js?flags=gated&features=IntersectionObserver"></script>
+    <script>
+      // ios IntersectionObserver polyfill has to have a page body scroll before it will
+      // fire... so we have to resort to polling unfortunately
+      IntersectionObserver.prototype.POLL_INTERVAL = 200; // Time in milliseconds.
+    </script>
     <!-- I copy the .js file into the example folder so netlify can just publish the example folder -->
     <script src="./infinite-carousel-wc.js"></script>
 
