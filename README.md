@@ -42,23 +42,27 @@ The infinite carousel works by laying out 3 slots, with slot names of `1`, `2`, 
 
 When inifinite-scroller-wc first renders it will show slot 1 as visible (called the "current" position). Slot 2 will be to the right (in the "next" position), and slot 3 will be to the left (in the "previous" position), like this:
 
-|     |     |     |
-| :-: | :-: | :-: |
-|  3  |  1  |  2  |
+| "previous" | "current" | "next" |
+| :--------: | :-------: | :----: |
+|     3      |     1     |   2    |
 
-When the user swipes/scrolls forward/next then some CSS will get added to the slots (technically to the slot's parents which are encapsulated in the shadow DOM) to re-order them. After 1 swipe/scroll it will look like this:
+Remember that "current" is the only slot visible to the user at rest. When the user peaks left or right they will then see the "previous" or "next" slot contents respectively.
 
-|     |     |     |
-| :-: | :-: | :-: |
-|  1  |  2  |  3  |
+When the user swipes/scrolls forward then some CSS will get added to the slots to re-order them (technically the CSS is added to the slot's parents which are encapsulated in the shadow DOM). After 1 swipe/scroll it will look like this:
+
+| "previous" | "current" | "next" |
+| :--------: | :-------: | :----: |
+|     1      |     2     |   3    |
 
 Another swipe forward/next would produce:
 
-|     |     |     |
-| :-: | :-: | :-: |
-|  2  |  3  |  1  |
+| "previous" | "current" | "next" |
+| :--------: | :-------: | :----: |
+|     2      |     3     |   1    |
 
-The circular re-ordering allows the user to swipe/scroll "infinitely". It is up to the consuming code to listen for the [`slot-order-changing` event](#events). For an example of listening to the event and updating the slot contents [take a look at index.html](./example/index.html#331).
+Swiping/scrolling backward would do the reverse, as you'd expect.
+
+The circular re-ordering allows the user to swipe/scroll "infinitely" in either direction. It is up to the consuming code to listen for the [`slot-order-changing` event](#events). For an example of listening to the event and updating the slot contents [take a look at index.html](./example/index.html#L331).
 
 ### Attributes/Properties
 
@@ -88,7 +92,7 @@ The circular re-ordering allows the user to swipe/scroll "infinitely". It is up 
 
 ### Styling
 
-You can style the infinite-carousel-wc element as you would any regular element, in CSS. You can see [an example in index.html](./example/index.html#30).
+You can style the infinite-carousel-wc element as you would any regular element, in CSS. You can see [an example in index.html](./example/index.html#L30).
 
 ## Contribute
 
