@@ -328,36 +328,32 @@
         slot2.innerText = "1";
         slot3.innerText = "2";
 
-        carousel.addEventListener("slot-order-changing", evt => {
-          if (evt.detail.direction === "next") {
-            switch (evt.detail.newCurrent) {
-              case 1:
-                slot2.innerText = Number(slot1.innerText) + 1;
-                break;
-              case 2:
-                slot3.innerText = Number(slot2.innerText) + 1;
-                break;
-              case 3:
-                slot1.innerText = Number(slot3.innerText) + 1;
-                break;
-            }
-          } else {
-            switch (evt.detail.newCurrent) {
-              case 1:
-                slot3.innerText = Number(slot1.innerText) - 1;
-                break;
-              case 2:
-                slot1.innerText = Number(slot2.innerText) - 1;
-                break;
-              case 3:
-                slot2.innerText = Number(slot3.innerText) - 1;
-                break;
-            }
+        carousel.addEventListener("next", evt => {
+          switch (evt.detail.newCurrent) {
+            case 1:
+              slot2.innerText = Number(slot1.innerText) + 1;
+              break;
+            case 2:
+              slot3.innerText = Number(slot2.innerText) + 1;
+              break;
+            case 3:
+              slot1.innerText = Number(slot3.innerText) + 1;
+              break;
           }
         });
 
-        carousel.addEventListener("slot-order-changed", evt => {
-          console.log("slot order change completed");
+        carousel.addEventListener("previous", evt => {
+          switch (evt.detail.newCurrent) {
+            case 1:
+              slot3.innerText = Number(slot1.innerText) - 1;
+              break;
+            case 2:
+              slot1.innerText = Number(slot2.innerText) - 1;
+              break;
+            case 3:
+              slot2.innerText = Number(slot3.innerText) - 1;
+              break;
+          }
         });
       }
     </script>

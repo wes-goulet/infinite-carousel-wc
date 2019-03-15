@@ -7,26 +7,14 @@ enum Constants {
   DebounceTimeout = 200
 }
 
-enum PaneId {
-  Pane1 = "p1",
-  Pane2 = "p2",
-  Pane3 = "p3"
+enum SlotId {
+  Slot1 = 1,
+  Slot2 = 2,
+  Slot3 = 3
 }
 
-export enum SlotPosition {
-  CURRENT = "current",
-  NEXT = "next",
-  PREVIOUS = "previous"
-}
-
-export enum Direction {
-  NEXT = "next",
-  PREVIOUS = "previous"
-}
-
-export interface ISlotChangeEventDetails {
+export interface ChangeEventDetail {
   newCurrent: 1 | 2 | 3;
-  direction: Direction;
 }
 
 // using a template so it only needs to be parsed once, whereas setting
@@ -37,11 +25,11 @@ templateElement.innerHTML = `<style>${style}</style>${template}`;
 
 export class InfiniteCarouselWc extends HTMLElement {
   _observer: IntersectionObserver;
-  _pane1: Element;
-  _pane2: Element;
-  _pane3: Element;
+  _slot1: Element;
+  _slot2: Element;
+  _slot3: Element;
   _scrollContainer: Element;
-  _current: PaneId;
+  _current: SlotId;
 
   // Explicitly let TS know any type can come from index signature
   [key: string]: any;
@@ -49,28 +37,32 @@ export class InfiniteCarouselWc extends HTMLElement {
   constructor() {
     super();
 
-    this.setPaneOrder.bind(this);
+    this.setSlotOrder.bind(this);
     this.upgradeProperty.bind(this);
-    this.raisePositionChangingEvent.bind(this);
+    this.raiseNextEvent.bind(this);
+    this.raisePreviousEvent.bind(this);
     this.goNext.bind(this);
     this.goPrevious.bind(this);
 
     const shadowRoot = this.attachShadow({ mode: "open" });
     shadowRoot.appendChild(templateElement.content.cloneNode(true));
 
-    this._scrollContainer = this.shadowRoot!.querySelector("#s")!;
-    this._pane1 = this.shadowRoot!.querySelector("#p1")!;
-    this._pane2 = this.shadowRoot!.querySelector("#p2")!;
-    this._pane3 = this.shadowRoot!.querySelector("#p3")!;
-    this._current = PaneId.Pane2; // pane 2 starts in the middle
+    this._scrollContainer = this.shadowRoot!.getElementById("s")!;
+    this._slot1 = this.shadowRoot!.getElementById("1")!;
+    this._slot2 = this.shadowRoot!.getElementById("2")!;
+    this._slot3 = this.shadowRoot!.getElementById("3")!;
+
+    // slot 2 starts in the middle, although our intersection observer will
+    // immediately set slot 1 to current... but we want to init this to 2
+    this._current = SlotId.Slot2;
 
     this._observer = new IntersectionObserver(
       (entries, _observer) => {
         for (let entry of entries) {
           if (entry.isIntersecting) {
             const oldCurrent = this._current;
-            this._current = entry.target.getAttribute("id") as PaneId;
-            this.setPaneOrder(oldCurrent, this._current);
+            this._current = Number(entry.target.getAttribute("id"));
+            this.setSlotOrder(oldCurrent, this._current);
             break;
           }
         }
@@ -80,15 +72,13 @@ export class InfiniteCarouselWc extends HTMLElement {
   }
 
   connectedCallback() {
-    this._observer.observe(this._pane1);
-    this._observer.observe(this._pane2);
-    this._observer.observe(this._pane3);
+    this.setObserver(true);
 
     this.upgradeProperty("lock");
   }
 
   disconnectedCallback() {
-    this._observer && this._observer.disconnect();
+    this.setObserver(false);
   }
 
   public goNext() {
@@ -105,6 +95,16 @@ export class InfiniteCarouselWc extends HTMLElement {
     });
   }
 
+  private setObserver = (observe: boolean) => {
+    if (observe) {
+      this._observer.observe(this._slot1);
+      this._observer.observe(this._slot2);
+      this._observer.observe(this._slot3);
+    } else {
+      this._observer.disconnect();
+    }
+  };
+
   // from https://developers.google.com/web/fundamentals/web-components/best-practices#lazy-properties
   private upgradeProperty(prop: string) {
     if (this.hasOwnProperty(prop)) {
@@ -113,8 +113,6 @@ export class InfiniteCarouselWc extends HTMLElement {
       this[prop] = value;
     }
   }
-
-  // - scroll bar is still visible on ios, potential fix https://stackoverflow.com/a/45590143
 
   get lock() {
     return this.hasAttribute("open");
@@ -128,17 +126,26 @@ export class InfiniteCarouselWc extends HTMLElement {
     }
   }
 
-  private raisePositionChangingEvent(eventDetails: ISlotChangeEventDetails) {
+  private raiseNextEvent(eventDetails: ChangeEventDetail) {
     this.dispatchEvent(
-      new CustomEvent("slot-order-changing", {
+      new CustomEvent("next", {
         bubbles: true,
         detail: eventDetails
       })
     );
   }
 
-  private setPaneOrder(oldCurrentPane: PaneId, newCurrentPane: PaneId) {
-    if (oldCurrentPane === newCurrentPane) {
+  private raisePreviousEvent(eventDetails: ChangeEventDetail) {
+    this.dispatchEvent(
+      new CustomEvent("previous", {
+        bubbles: true,
+        detail: eventDetails
+      })
+    );
+  }
+
+  private setSlotOrder(oldCurrentSlot: SlotId, newCurrentSlot: SlotId) {
+    if (oldCurrentSlot === newCurrentSlot) {
       return;
     }
 
@@ -149,80 +156,76 @@ export class InfiniteCarouselWc extends HTMLElement {
     // over-scrolling, which helps give the next->next view time
     // to update the slot content.
 
-    const direction =
-      (oldCurrentPane === PaneId.Pane2 && newCurrentPane === PaneId.Pane1) ||
-      (oldCurrentPane === PaneId.Pane3 && newCurrentPane === PaneId.Pane2) ||
-      (oldCurrentPane === PaneId.Pane1 && newCurrentPane === PaneId.Pane3)
-        ? Direction.PREVIOUS
-        : Direction.NEXT;
+    const isPrevious =
+      (oldCurrentSlot === SlotId.Slot2 && newCurrentSlot === SlotId.Slot1) ||
+      (oldCurrentSlot === SlotId.Slot3 && newCurrentSlot === SlotId.Slot2) ||
+      (oldCurrentSlot === SlotId.Slot1 && newCurrentSlot === SlotId.Slot3);
 
-    switch (newCurrentPane) {
-      case PaneId.Pane1:
-        this._scrollContainer.classList.add("no-x-scroll");
-        this.raisePositionChangingEvent({
-          direction,
-          newCurrent: 1
-        });
+    // disable scrolling and observing while we re-arrange stuff
+    this.setObserver(false);
+    this._scrollContainer.classList.add("no-x-scroll");
 
+    // emit event
+    if (isPrevious) {
+      this.raisePreviousEvent({ newCurrent: newCurrentSlot });
+    } else {
+      this.raiseNextEvent({ newCurrent: newCurrentSlot });
+    }
+
+    switch (newCurrentSlot) {
+      case SlotId.Slot1:
         setTimeout(() => {
-          this._pane1.classList.remove("previous");
-          this._pane1.classList.remove("next");
-          this._pane1.classList.add("current");
-          this._pane3.classList.add("previous");
-          this._pane3.classList.remove("next");
-          this._pane3.classList.remove("current");
-          this._pane2.classList.remove("previous");
-          this._pane2.classList.add("next");
-          this._pane2.classList.remove("current");
-          this._scrollContainer.scrollLeft = this._pane3.clientWidth;
+          this._slot1.classList.remove("previous");
+          this._slot1.classList.remove("next");
+          this._slot1.classList.add("current");
+          this._slot3.classList.add("previous");
+          this._slot3.classList.remove("next");
+          this._slot3.classList.remove("current");
+          this._slot2.classList.remove("previous");
+          this._slot2.classList.add("next");
+          this._slot2.classList.remove("current");
+          this._scrollContainer.scrollLeft = this._slot3.clientWidth;
+
+          this.setObserver(true);
           this._scrollContainer.classList.remove("no-x-scroll");
         }, Constants.DebounceTimeout);
         break;
-      case PaneId.Pane2:
-        this._scrollContainer.classList.add("no-x-scroll");
-        this.raisePositionChangingEvent({
-          direction,
-          newCurrent: 2
-        });
-
+      case SlotId.Slot2:
         setTimeout(() => {
-          this._pane1.classList.add("previous");
-          this._pane1.classList.remove("next");
-          this._pane1.classList.remove("current");
-          this._pane3.classList.remove("previous");
-          this._pane3.classList.add("next");
-          this._pane3.classList.remove("current");
-          this._pane2.classList.remove("previous");
-          this._pane2.classList.remove("next");
-          this._pane2.classList.add("current");
-          this._scrollContainer.scrollLeft = this._pane1.clientWidth;
+          this._slot1.classList.add("previous");
+          this._slot1.classList.remove("next");
+          this._slot1.classList.remove("current");
+          this._slot3.classList.remove("previous");
+          this._slot3.classList.add("next");
+          this._slot3.classList.remove("current");
+          this._slot2.classList.remove("previous");
+          this._slot2.classList.remove("next");
+          this._slot2.classList.add("current");
+          this._scrollContainer.scrollLeft = this._slot1.clientWidth;
+
+          this.setObserver(true);
           this._scrollContainer.classList.remove("no-x-scroll");
         }, Constants.DebounceTimeout);
         break;
-      case PaneId.Pane3:
-        this._scrollContainer.classList.add("no-x-scroll");
-        this.raisePositionChangingEvent({
-          direction,
-          newCurrent: 3
-        });
-
+      case SlotId.Slot3:
         setTimeout(() => {
-          this._pane1.classList.remove("previous");
-          this._pane1.classList.add("next");
-          this._pane1.classList.remove("current");
-          this._pane3.classList.remove("previous");
-          this._pane3.classList.remove("next");
-          this._pane3.classList.add("current");
-          this._pane2.classList.add("previous");
-          this._pane2.classList.remove("next");
-          this._pane2.classList.remove("current");
-          this._scrollContainer.scrollLeft = this._pane2.clientWidth;
+          this._slot1.classList.remove("previous");
+          this._slot1.classList.add("next");
+          this._slot1.classList.remove("current");
+          this._slot3.classList.remove("previous");
+          this._slot3.classList.remove("next");
+          this._slot3.classList.add("current");
+          this._slot2.classList.add("previous");
+          this._slot2.classList.remove("next");
+          this._slot2.classList.remove("current");
+          this._scrollContainer.scrollLeft = this._slot2.clientWidth;
+
+          this.setObserver(true);
           this._scrollContainer.classList.remove("no-x-scroll");
         }, Constants.DebounceTimeout);
         break;
       default:
-        console.error(`this._current has bad value: ${this._current}`);
-        break;
+        throw `this._current has bad value: ${this._current}`;
     }
   }
 }

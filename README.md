@@ -62,7 +62,7 @@ Another swipe forward/next would produce:
 
 Swiping/scrolling backward would do the reverse, as you'd expect.
 
-The circular re-ordering allows the user to swipe/scroll "infinitely" in either direction. It is up to the consuming code to listen for the [`slot-order-changing` event](#events). For an example of listening to the event and updating the slot contents [take a look at index.html](./example/index.html#L331).
+The circular re-ordering allows the user to swipe/scroll "infinitely" in either direction. It is up to the consuming code to listen for the [`next` or `previous` events](#events). For an example of listening to the event and updating the slot contents [take a look at index.html](./example/index.html#L331).
 
 ### Attributes/Properties
 
@@ -74,21 +74,28 @@ The circular re-ordering allows the user to swipe/scroll "infinitely" in either 
 
 ### Events
 
-- `slot-order-changing`
-  - Raised after the user has scrolled to the next or previous slot
+- `next`
+  - Raised after the user has scrolled to the next slot
   - Raised about 200ms before the user is allowed to scroll again
-  - `event.detail` contains an `ISlotChangeEventDetails` object of the following shape:
+  - `event.detail` contains an `ChangeEventDetail` object of the following shape:
     ```ts
-    export interface ISlotChangeEventDetails {
+    export interface ChangeEventDetail {
       newCurrent: 1 | 2 | 3;
-      direction: Direction;
     }
     ```
-  - `Direction` is an enum telling you if the user swiped the next or previous pane into view.
-  - Both `Direction` and `ISlotChangeEventDetails` are exported types that you can consume if you are writing your code in Typescript.
-  - Example: `carousel.addEventListener("slot-order-changing", handleCarouselOrderChange())`
-  - When subscribing in html listen for `onslot-order-changing`
-    - Ex: `<infinite-carousel-wc onslot-order-changing="handleCarouselOrderChange()">`
+  - `ChangeEventDetail` is an exported type that you can consume if you are writing your code in Typescript.
+  - Example: `carousel.addEventListener("next", handleCarouselNext())`
+- `previous`
+  - Raised after the user has scrolled to the previous slot
+  - Raised about 200ms before the user is allowed to scroll again
+  - `event.detail` contains an `ChangeEventDetail` object of the following shape:
+    ```ts
+    export interface ChangeEventDetail {
+      newCurrent: 1 | 2 | 3;
+    }
+    ```
+  - `ChangeEventDetail` is an exported type that you can consume if you are writing your code in Typescript.
+  - Example: `carousel.addEventListener("next", handleCarouselNext())`
 
 ### Styling
 
