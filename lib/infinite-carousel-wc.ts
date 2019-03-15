@@ -115,8 +115,6 @@ export class InfiniteCarouselWc extends HTMLElement {
     }
   }
 
-  // TODO - wes
-  // - add events for consumer to hook up to
   // - scroll bar is still visible on ios, potential fix https://stackoverflow.com/a/45590143
 
   get lock() {
@@ -134,15 +132,6 @@ export class InfiniteCarouselWc extends HTMLElement {
   private raisePositionChangingEvent(eventDetails: ISlotChangeEventDetails) {
     this.dispatchEvent(
       new CustomEvent("slot-order-changing", {
-        bubbles: true,
-        detail: eventDetails
-      })
-    );
-  }
-
-  private raisePositionChangedEvent(eventDetails: ISlotChangeEventDetails) {
-    this.dispatchEvent(
-      new CustomEvent("slot-order-changed", {
         bubbles: true,
         detail: eventDetails
       })

@@ -38,48 +38,33 @@ This custom element uses [CSS Scroll Snap](https://caniuse.com/#feat=css-snappoi
 
 ### Attributes/Properties
 
-- `open`
-  - Add this attribute to open the drawer.
-    - Example: `<infinite-carousel-wc open></infinite-carousel-wc>`
-  - Set the property in Javascript to imperatively toggle the drawer
-    - Example: `drawer.open = true`
+- `lock`
+  - Add this attribute to prevent scrolling.
+    - Example: `<infinite-carousel-wc lock></infinite-carousel-wc>`
+  - Set the property in Javascript to imperatively disable scrolling
+    - Example: `carousel.lock = true`
 
 ### Events
 
-- `open`
-  - Raised when the drawer is opened.
-  - Example: `drawer.addEventListener("open", handleOpen())`
-  - When subscribing in html listen for `onopen`
-    - Ex: `<infinite-carousel-wc onopen="handleOpen()">`
-- `close`
-  -Raised when the drawer is closed.
-  - Example: `drawer.addEventListener("close", handleClose())`
-  - When subscribing in html listen for `onclose`
-    - Ex: `<infinite-carousel-wc onclose="handleClose()">`
+- `slot-order-changing`
+  - Raised after the user has scrolled to the next or previous slot
+  - Raised about 200ms before the user is allowed to scroll again
+  - `event.detail` contains an `ISlotChangeEventDetails` object of the following shape:
+    ```ts
+    export interface ISlotChangeEventDetails {
+      newCurrent: 1 | 2 | 3;
+      direction: Direction;
+    }
+    ```
+  - `Direction` is an enum telling you if the user swiped the next or previous pane into view.
+  - Both `Direction` and `ISlotChangeEventDetails` are exported types that you can consume if you are writing your code in Typescript.
+  - Example: `carousel.addEventListener("slot-order-changing", handleCarouselOrderChange())`
+  - When subscribing in html listen for `onslot-order-changing`
+    - Ex: `<infinite-carousel-wc onslot-order-changing="handleCarouselOrderChange()">`
 
 ### Styling
 
-You can style the infinite-carousel-wc element as you would any regular element, in CSS. A list of supported CSS properties are below, along with the default values.
-
-```css
-infinite-carousel-wc {
-  background-color: #ffffff;
-  color: inherit;
-  width: 350px;
-  max-width: 75vw;
-  border-top-right-radius: 0;
-  border-bottom-right-radius: 0;
-}
-```
-
-You can customize the overlay that appears to the right of the drawer (when it's open) by setting one of the following CSS variables.
-
-- `--infinite-carousel-wc-overlay-transition`
-  - Sets the transition
-  - Default is `opacity 0.25s ease-in-out 0.25s`
-- `--infinite-carousel-wc-overlay-opacity`
-  - Sets the opacity of the overlay
-  - Default is `0.7`
+You can style the infinite-carousel-wc element as you would any regular element, in CSS. You can see [an example in index.html](./example/index.html#30).
 
 ## Contribute
 
