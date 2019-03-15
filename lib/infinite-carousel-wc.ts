@@ -59,7 +59,7 @@ export class InfiniteCarouselWc extends HTMLElement {
     this._observer = new IntersectionObserver(
       (entries, _observer) => {
         for (let entry of entries) {
-          if (entry.isIntersecting) {
+          if (entry.intersectionRatio === 1) {
             const oldCurrent = this._current;
             this._current = Number(entry.target.getAttribute("id"));
             this.setSlotOrder(oldCurrent, this._current);
