@@ -75,6 +75,7 @@ The circular re-ordering allows the user to swipe/scroll "infinitely" in either 
 ### Events
 
 - `next`
+
   - Raised after the user has scrolled to the next slot
   - Raised about 200ms before the user is allowed to scroll again
   - `event.detail` contains an `ChangeEventDetail` object of the following shape:
@@ -85,6 +86,7 @@ The circular re-ordering allows the user to swipe/scroll "infinitely" in either 
     ```
   - `ChangeEventDetail` is an exported type that you can consume if you are writing your code in Typescript.
   - Example: `carousel.addEventListener("next", handleCarouselNext())`
+
 - `previous`
   - Raised after the user has scrolled to the previous slot
   - Raised about 200ms before the user is allowed to scroll again
@@ -95,7 +97,7 @@ The circular re-ordering allows the user to swipe/scroll "infinitely" in either 
     }
     ```
   - `ChangeEventDetail` is an exported type that you can consume if you are writing your code in Typescript.
-  - Example: `carousel.addEventListener("next", handleCarouselNext())`
+  - Example: `carousel.addEventListener("previous", handleCarouselPrevious())`
 
 ### Styling
 
