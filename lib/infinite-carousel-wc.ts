@@ -52,7 +52,6 @@ export class InfiniteCarouselWc extends HTMLElement {
     this.setPaneOrder.bind(this);
     this.upgradeProperty.bind(this);
     this.raisePositionChangingEvent.bind(this);
-    this.raisePositionChangedEvent.bind(this);
     this.goNext.bind(this);
     this.goPrevious.bind(this);
 
@@ -177,10 +176,6 @@ export class InfiniteCarouselWc extends HTMLElement {
           this._pane2.classList.remove("current");
           this._scrollContainer.scrollLeft = this._pane3.clientWidth;
           this._scrollContainer.classList.remove("no-x-scroll");
-          this.raisePositionChangedEvent({
-            direction,
-            newCurrent: 1
-          });
         }, Constants.DebounceTimeout);
         break;
       case PaneId.Pane2:
@@ -202,10 +197,6 @@ export class InfiniteCarouselWc extends HTMLElement {
           this._pane2.classList.add("current");
           this._scrollContainer.scrollLeft = this._pane1.clientWidth;
           this._scrollContainer.classList.remove("no-x-scroll");
-          this.raisePositionChangedEvent({
-            direction,
-            newCurrent: 2
-          });
         }, Constants.DebounceTimeout);
         break;
       case PaneId.Pane3:
@@ -227,10 +218,6 @@ export class InfiniteCarouselWc extends HTMLElement {
           this._pane2.classList.remove("current");
           this._scrollContainer.scrollLeft = this._pane2.clientWidth;
           this._scrollContainer.classList.remove("no-x-scroll");
-          this.raisePositionChangedEvent({
-            direction,
-            newCurrent: 3
-          });
         }, Constants.DebounceTimeout);
         break;
       default:
