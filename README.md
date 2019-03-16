@@ -66,7 +66,16 @@ Another swipe forward/next would produce:
 
 Swiping/scrolling backward would do the reverse, as you'd expect.
 
-The circular re-ordering allows the user to swipe/scroll "infinitely" in either direction. It is up to the consuming code to listen for the [`next` or `previous` events](#events). For an example of listening to the event and updating the slot contents [take a look at index.html](./example/index.html#L150).
+The circular re-ordering allows the user to swipe/scroll "infinitely" in either direction. It is up to the consuming code to listen for the [`next` or `previous` events](#events). For an example of listening to the event and updating the slot contents [take a look at index.html](./example/index.html#L154).
+
+### Methods
+
+- `goNext()`
+  - Scrolls to the next slot.
+  - Example: `document.getElementById("carousel").goNext()`
+- `goPrevious()`
+  - Scrolls to the previous slot.
+  - Example: `document.getElementById("carousel").goPrevious()`
 
 ### Attributes/Properties
 

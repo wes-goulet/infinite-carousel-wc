@@ -67,6 +67,18 @@ section {
   padding-top: 50px;
 }
 
+.hero-demo > button {
+  margin-top: 21px;
+  margin: 21px 9px;
+  padding: 21px;
+  text-align: center;
+  background-color: var(--primary-accent-color);
+  color: var(--primary-bg-color);
+  font-size: 21px;
+  border-radius: 5px;
+  width: 120px;
+}
+
 .hero-cta {
   display: flex;
   justify-content: center;
