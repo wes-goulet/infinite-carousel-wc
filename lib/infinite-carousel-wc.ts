@@ -78,6 +78,7 @@ export class InfiniteCarouselWc extends HTMLElement {
     this._observer.observe(this._slot3);
 
     this.upgradeProperty("lock");
+    this.upgradeProperty("vertical");
   }
 
   disconnectedCallback() {
@@ -123,6 +124,18 @@ export class InfiniteCarouselWc extends HTMLElement {
     }
   }
 
+  get vertical() {
+    return this.hasAttribute("vertical");
+  }
+
+  set vertical(isVertical) {
+    if (isVertical) {
+      this.setAttribute("vertical", "");
+    } else {
+      this.removeAttribute("vertical");
+    }
+  }
+
   private raiseNextEvent(eventDetails: ChangeEventDetail) {
     this.dispatchEvent(
       new CustomEvent("next", {
@@ -161,7 +174,7 @@ export class InfiniteCarouselWc extends HTMLElement {
       (oldCurrentSlot === SlotId.Slot1 && newCurrentSlot === SlotId.Slot3);
 
     // disable scrolling while we re-arrange stuff
-    this._scrollContainer.classList.add("no-x-scroll");
+    this._scrollContainer.classList.add("no-scroll");
 
     // emit event
     if (isPrevious) {
@@ -185,7 +198,7 @@ export class InfiniteCarouselWc extends HTMLElement {
           this._scrollContainer.scrollLeft = this._slot3.clientWidth;
 
           this._lockScroll = false;
-          this._scrollContainer.classList.remove("no-x-scroll");
+          this._scrollContainer.classList.remove("no-scroll");
         }, Constants.DebounceTimeout);
         break;
       case SlotId.Slot2:
@@ -202,7 +215,7 @@ export class InfiniteCarouselWc extends HTMLElement {
           this._scrollContainer.scrollLeft = this._slot1.clientWidth;
 
           this._lockScroll = false;
-          this._scrollContainer.classList.remove("no-x-scroll");
+          this._scrollContainer.classList.remove("no-scroll");
         }, Constants.DebounceTimeout);
         break;
       case SlotId.Slot3:
@@ -219,7 +232,7 @@ export class InfiniteCarouselWc extends HTMLElement {
           this._scrollContainer.scrollLeft = this._slot2.clientWidth;
 
           this._lockScroll = false;
-          this._scrollContainer.classList.remove("no-x-scroll");
+          this._scrollContainer.classList.remove("no-scroll");
         }, Constants.DebounceTimeout);
         break;
       default:

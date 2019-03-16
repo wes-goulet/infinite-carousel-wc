@@ -1,11 +1,7 @@
 #s {
   height: inherit;
-  width: 100%;
+  width: inherit;
   display: flex;
-  scroll-snap-coordinate: 0 0;
-  scroll-snap-points-x: repeat(100%);
-  scroll-snap-type: x mandatory;
-  overflow-x: auto;
   -webkit-overflow-scrolling: touch;
   -ms-overflow-style: none;
   overflow: -moz-scrollbars-none;
@@ -13,6 +9,22 @@
 
 #s::-webkit-scrollbar {
   display: none;
+}
+
+:host:not([vertical]) #s {
+  flex-direction: row;
+  scroll-snap-coordinate: 0 0;
+  scroll-snap-points-x: repeat(100%);
+  scroll-snap-type: x mandatory;
+  overflow-x: auto;
+}
+
+:host([vertical]) #s {
+  flex-direction: column;
+  scroll-snap-coordinate: 0 0;
+  scroll-snap-points-y: repeat(100%);
+  scroll-snap-type: y mandatory;
+  overflow-y: auto;
 }
 
 #s > div {
@@ -23,8 +35,12 @@
   scroll-snap-stop: always;
 }
 
-:host([lock]) #s {
+:host([lock]:not([vertical])) #s {
   overflow-x: hidden;
+}
+
+:host([lock][vertical]) #s {
+  overflow-y: hidden;
 }
 
 ::slotted(*) {
@@ -44,6 +60,7 @@
   order: 3;
 }
 
-.no-x-scroll {
+.no-scroll {
   overflow-x: hidden !important;
+  overflow-y: hidden !important;
 }
