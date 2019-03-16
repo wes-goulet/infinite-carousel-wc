@@ -88,7 +88,8 @@ export class InfiniteCarouselWc extends HTMLElement {
   public goNext() {
     if (!this._lockScroll) {
       this._scrollContainer.scrollBy({
-        left: this._scrollContainer.clientWidth,
+        left: this.vertical ? undefined : this._scrollContainer.clientWidth,
+        top: this.vertical ? this._scrollContainer.clientHeight : undefined,
         behavior: "smooth"
       });
     }
@@ -97,7 +98,12 @@ export class InfiniteCarouselWc extends HTMLElement {
   public goPrevious() {
     if (!this._lockScroll) {
       this._scrollContainer.scrollBy({
-        left: this._scrollContainer.clientWidth * -1,
+        left: this.vertical
+          ? undefined
+          : this._scrollContainer.clientWidth * -1,
+        top: this.vertical
+          ? this._scrollContainer.clientHeight * -1
+          : undefined,
         behavior: "smooth"
       });
     }
@@ -195,7 +201,12 @@ export class InfiniteCarouselWc extends HTMLElement {
           this._slot2.classList.remove("previous");
           this._slot2.classList.add("next");
           this._slot2.classList.remove("current");
-          this._scrollContainer.scrollLeft = this._slot3.clientWidth;
+
+          if (this.vertical) {
+            this._scrollContainer.scrollTop = this._slot3.clientHeight;
+          } else {
+            this._scrollContainer.scrollLeft = this._slot3.clientWidth;
+          }
 
           this._lockScroll = false;
           this._scrollContainer.classList.remove("no-scroll");
@@ -212,7 +223,11 @@ export class InfiniteCarouselWc extends HTMLElement {
           this._slot2.classList.remove("previous");
           this._slot2.classList.remove("next");
           this._slot2.classList.add("current");
-          this._scrollContainer.scrollLeft = this._slot1.clientWidth;
+          if (this.vertical) {
+            this._scrollContainer.scrollTop = this._slot1.clientHeight;
+          } else {
+            this._scrollContainer.scrollLeft = this._slot1.clientWidth;
+          }
 
           this._lockScroll = false;
           this._scrollContainer.classList.remove("no-scroll");
@@ -229,7 +244,11 @@ export class InfiniteCarouselWc extends HTMLElement {
           this._slot2.classList.add("previous");
           this._slot2.classList.remove("next");
           this._slot2.classList.remove("current");
-          this._scrollContainer.scrollLeft = this._slot2.clientWidth;
+          if (this.vertical) {
+            this._scrollContainer.scrollTop = this._slot2.clientHeight;
+          } else {
+            this._scrollContainer.scrollLeft = this._slot2.clientWidth;
+          }
 
           this._lockScroll = false;
           this._scrollContainer.classList.remove("no-scroll");
