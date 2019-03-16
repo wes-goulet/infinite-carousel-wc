@@ -30,6 +30,7 @@ export class InfiniteCarouselWc extends HTMLElement {
   _slot3: Element;
   _scrollContainer: Element;
   _current: SlotId;
+  _lockScroll: boolean = false;
 
   // Explicitly let TS know any type can come from index signature
   [key: string]: any;
@@ -72,38 +73,34 @@ export class InfiniteCarouselWc extends HTMLElement {
   }
 
   connectedCallback() {
-    this.setObserver(true);
+    this._observer.observe(this._slot1);
+    this._observer.observe(this._slot2);
+    this._observer.observe(this._slot3);
 
     this.upgradeProperty("lock");
   }
 
   disconnectedCallback() {
-    this.setObserver(false);
+    this._observer.disconnect();
   }
 
   public goNext() {
-    this._scrollContainer.scrollBy({
-      left: this._scrollContainer.clientWidth,
-      behavior: "smooth"
-    });
+    if (!this._lockScroll) {
+      this._scrollContainer.scrollBy({
+        left: this._scrollContainer.clientWidth,
+        behavior: "smooth"
+      });
+    }
   }
 
   public goPrevious() {
-    this._scrollContainer.scrollBy({
-      left: this._scrollContainer.clientWidth * -1,
-      behavior: "smooth"
-    });
-  }
-
-  private setObserver = (observe: boolean) => {
-    if (observe) {
-      this._observer.observe(this._slot1);
-      this._observer.observe(this._slot2);
-      this._observer.observe(this._slot3);
-    } else {
-      this._observer.disconnect();
+    if (!this._lockScroll) {
+      this._scrollContainer.scrollBy({
+        left: this._scrollContainer.clientWidth * -1,
+        behavior: "smooth"
+      });
     }
-  };
+  }
 
   // from https://developers.google.com/web/fundamentals/web-components/best-practices#lazy-properties
   private upgradeProperty(prop: string) {
@@ -115,7 +112,7 @@ export class InfiniteCarouselWc extends HTMLElement {
   }
 
   get lock() {
-    return this.hasAttribute("open");
+    return this.hasAttribute("lock");
   }
 
   set lock(isLocked) {
@@ -145,9 +142,11 @@ export class InfiniteCarouselWc extends HTMLElement {
   }
 
   private setSlotOrder(oldCurrentSlot: SlotId, newCurrentSlot: SlotId) {
-    if (oldCurrentSlot === newCurrentSlot) {
+    if (oldCurrentSlot === newCurrentSlot || this._lockScroll) {
       return;
     }
+
+    this._lockScroll = true;
 
     // safari seems to have a bug(?) where it won't programmatically
     // scroll within 158 milliseconds after a css scroll snap, so we use
@@ -161,8 +160,7 @@ export class InfiniteCarouselWc extends HTMLElement {
       (oldCurrentSlot === SlotId.Slot3 && newCurrentSlot === SlotId.Slot2) ||
       (oldCurrentSlot === SlotId.Slot1 && newCurrentSlot === SlotId.Slot3);
 
-    // disable scrolling and observing while we re-arrange stuff
-    this.setObserver(false);
+    // disable scrolling while we re-arrange stuff
     this._scrollContainer.classList.add("no-x-scroll");
 
     // emit event
@@ -186,7 +184,7 @@ export class InfiniteCarouselWc extends HTMLElement {
           this._slot2.classList.remove("current");
           this._scrollContainer.scrollLeft = this._slot3.clientWidth;
 
-          this.setObserver(true);
+          this._lockScroll = false;
           this._scrollContainer.classList.remove("no-x-scroll");
         }, Constants.DebounceTimeout);
         break;
@@ -203,7 +201,7 @@ export class InfiniteCarouselWc extends HTMLElement {
           this._slot2.classList.add("current");
           this._scrollContainer.scrollLeft = this._slot1.clientWidth;
 
-          this.setObserver(true);
+          this._lockScroll = false;
           this._scrollContainer.classList.remove("no-x-scroll");
         }, Constants.DebounceTimeout);
         break;
@@ -220,7 +218,7 @@ export class InfiniteCarouselWc extends HTMLElement {
           this._slot2.classList.remove("current");
           this._scrollContainer.scrollLeft = this._slot2.clientWidth;
 
-          this.setObserver(true);
+          this._lockScroll = false;
           this._scrollContainer.classList.remove("no-x-scroll");
         }, Constants.DebounceTimeout);
         break;
