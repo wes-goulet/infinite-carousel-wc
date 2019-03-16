@@ -86,7 +86,7 @@ export class InfiniteCarouselWc extends HTMLElement {
   }
 
   public goNext() {
-    if (!this._lockScroll) {
+    if (!this._lockScroll && !this.lock) {
       this._scrollContainer.scrollBy({
         left: this.vertical ? undefined : this._scrollContainer.clientWidth,
         top: this.vertical ? this._scrollContainer.clientHeight : undefined,
@@ -96,7 +96,7 @@ export class InfiniteCarouselWc extends HTMLElement {
   }
 
   public goPrevious() {
-    if (!this._lockScroll) {
+    if (!this._lockScroll && !this.lock) {
       this._scrollContainer.scrollBy({
         left: this.vertical
           ? undefined

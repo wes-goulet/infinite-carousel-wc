@@ -11,7 +11,7 @@
   display: none;
 }
 
-:host:not([vertical]) #s {
+:host(:not([vertical])) #s {
   flex-direction: row;
   scroll-snap-coordinate: 0 0;
   scroll-snap-points-x: repeat(100%);
