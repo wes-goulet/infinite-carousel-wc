@@ -66,7 +66,7 @@ Another swipe forward/next would produce:
 
 Swiping/scrolling backward would do the reverse, as you'd expect.
 
-The circular re-ordering allows the user to swipe/scroll "infinitely" in either direction. It is up to the consuming code to listen for the [`next` or `previous` events](#events). For an example of listening to the event and updating the slot contents [take a look at index.html](./example/index.html#L154).
+The circular re-ordering allows the user to swipe/scroll "infinitely" in either direction. It is up to the consuming code to listen for the [`next` or `previous` events](#events). For an example of listening to the event and updating the slot contents [take a look at index.html](./example/index.html#L173).
 
 ### Methods
 
@@ -79,6 +79,11 @@ The circular re-ordering allows the user to swipe/scroll "infinitely" in either 
 
 ### Attributes/Properties
 
+- `vertical`
+  - Add this attribute to make your carousel scroll vertically instead of horizontally.
+    - Example: `<infinite-carousel-wc vertical></infinite-carousel-wc>`
+  - Set the property in Javascript to imperatively set vertical scrolling
+    - Example: `carousel.vertical = true`
 - `lock`
   - Add this attribute to prevent scrolling.
     - Example: `<infinite-carousel-wc lock></infinite-carousel-wc>`
@@ -114,7 +119,7 @@ The circular re-ordering allows the user to swipe/scroll "infinitely" in either 
 
 ### Styling
 
-You can style the infinite-carousel-wc element as you would any regular element, in CSS. You can see [an example in example.css](./example/example.css#L12).
+You can style the infinite-carousel-wc element as you would any regular element, in CSS. You can see [an example in example.css](./example/example.css#L13).
 
 ## Contribute
 

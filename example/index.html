@@ -41,6 +41,18 @@
           </infinite-carousel-wc>
           <button onclick="handlePrevious()">&larr;</button>
           <button onclick="handleNext()">&rarr;</button>
+
+          <div class="vertical-demo">
+            <div class="vertical-demo-button-container">
+              <button onclick="handleUp()">&uarr;</button>
+              <button onclick="handleDown()">&darr;</button>
+            </div>
+            <infinite-carousel-wc id="v-carousel" vertical>
+              <div id="v-slot1" slot="1"></div>
+              <div id="v-slot2" slot="2"></div>
+              <div id="v-slot3" slot="3"></div>
+            </infinite-carousel-wc>
+          </div>
         </div>
       </section>
 
@@ -89,7 +101,7 @@
                 ></polygon>
               </g>
             </svg>
-            Portable
+            Horizontal or Vertical
           </li>
           <li>
             <svg class="icon-checkmark" width="96" height="23">
@@ -141,15 +153,22 @@
 
     <script>
       const carousel = document.getElementById("carousel");
+      const vCarousel = document.getElementById("v-carousel");
 
       function handleBodyLoad() {
         const slot1 = document.getElementById("slot1");
         const slot2 = document.getElementById("slot2");
         const slot3 = document.getElementById("slot3");
+        const vSlot1 = document.getElementById("v-slot1");
+        const vSlot2 = document.getElementById("v-slot2");
+        const vSlot3 = document.getElementById("v-slot3");
 
         slot1.innerText = "0";
         slot2.innerText = "1";
         slot3.innerText = "2";
+        vSlot1.innerText = "0";
+        vSlot2.innerText = "1";
+        vSlot3.innerText = "2";
 
         carousel.addEventListener("next", evt => {
           switch (evt.detail.newCurrent) {
@@ -178,6 +197,34 @@
               break;
           }
         });
+
+        vCarousel.addEventListener("next", evt => {
+          switch (evt.detail.newCurrent) {
+            case 1:
+              vSlot2.innerText = Number(vSlot1.innerText) + 1;
+              break;
+            case 2:
+              vSlot3.innerText = Number(vSlot2.innerText) + 1;
+              break;
+            case 3:
+              vSlot1.innerText = Number(vSlot3.innerText) + 1;
+              break;
+          }
+        });
+
+        vCarousel.addEventListener("previous", evt => {
+          switch (evt.detail.newCurrent) {
+            case 1:
+              vSlot3.innerText = Number(vSlot1.innerText) - 1;
+              break;
+            case 2:
+              vSlot1.innerText = Number(vSlot2.innerText) - 1;
+              break;
+            case 3:
+              vSlot2.innerText = Number(vSlot3.innerText) - 1;
+              break;
+          }
+        });
       }
 
       function handlePrevious() {
@@ -186,6 +233,14 @@
 
       function handleNext() {
         carousel.goNext();
+      }
+
+      function handleUp() {
+        vCarousel.goPrevious();
+      }
+
+      function handleDown() {
+        vCarousel.goNext();
       }
     </script>
   </body>
