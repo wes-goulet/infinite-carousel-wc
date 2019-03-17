@@ -140,6 +140,11 @@ export class InfiniteCarouselWc extends HTMLElement {
     } else {
       this.removeAttribute("vertical");
     }
+
+    // if the vertical attribute changes then reset the slot order to start
+    // with slot 1
+    this._current = SlotId.Slot1;
+    this.setSlotOrder(SlotId.Slot2, SlotId.Slot1);
   }
 
   private raiseNextEvent(eventDetails: ChangeEventDetail) {
@@ -255,7 +260,7 @@ export class InfiniteCarouselWc extends HTMLElement {
         }, Constants.DebounceTimeout);
         break;
       default:
-        throw `this._current has bad value: ${this._current}`;
+        throw `newCurrentSlot has bad value: ${newCurrentSlot}`;
     }
   }
 }
