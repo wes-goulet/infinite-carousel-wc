@@ -9,13 +9,8 @@
   --code-fg-color: #2c2c2c;
 }
 
-infinite-carousel-wc:not([vertical]) {
+infinite-carousel-wc {
   width: 100%;
-  height: 300px;
-}
-
-infinite-carousel-wc[vertical] {
-  width: 80%;
   height: 300px;
 }
 
@@ -49,7 +44,7 @@ infinite-carousel-wc > div {
 }
 
 .vertical-demo infinite-carousel-wc {
-  flex: 9;
+  flex: 5;
 }
 
 .vertical-demo-button-container {
