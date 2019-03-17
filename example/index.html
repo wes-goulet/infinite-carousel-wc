@@ -163,12 +163,13 @@
         const vSlot2 = document.getElementById("v-slot2");
         const vSlot3 = document.getElementById("v-slot3");
 
+        // REMINDER: the README says slot 3 starts in the "previous" position
         slot1.innerText = "0";
         slot2.innerText = "1";
-        slot3.innerText = "2";
+        slot3.innerText = "-1";
         vSlot1.innerText = "0";
         vSlot2.innerText = "1";
-        vSlot3.innerText = "2";
+        vSlot3.innerText = "-1";
 
         carousel.addEventListener("next", evt => {
           switch (evt.detail.newCurrent) {
