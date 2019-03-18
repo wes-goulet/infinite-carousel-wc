@@ -100,6 +100,9 @@ section {
 
 .hero-demo {
   padding-top: 50px;
+
+  animation-duration: 0.3s;
+  animation-fill-mode: both;
 }
 
 .hero-cta {
@@ -220,4 +223,30 @@ a {
   background-position: right center;
 
   cursor: pointer;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.fade-in {
+  animation-name: fadeIn;
+}
+
+.fade-out {
+  animation-name: fadeOut;
 }

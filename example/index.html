@@ -44,8 +44,8 @@
             <div id="slot2" slot="2"></div>
             <div id="slot3" slot="3"></div>
           </infinite-carousel-wc>
-          <button id="previousButton" onclick="handlePrevious()">&larr;</button>
-          <button id="nextButton" onclick="handleNext()">&rarr;</button>
+          <button onclick="handlePrevious()">&larr;</button>
+          <button onclick="handleNext()">&rarr;</button>
         </div>
 
         <mwc-switch
@@ -202,10 +202,30 @@
       }
 
       function handleSwitchChange(e) {
-        carousel.vertical = verticalSwitch._input.checked;
+        carousel.parentElement.classList.add("fade-out");
+        setTimeout(() => {
+          setCarouselVerticalAttribute(verticalSwitch._input.checked);
+          setTimeout(() => {
+            carousel.parentElement.classList.remove("fade-out");
+            carousel.parentElement.classList.add("fade-in");
+          }, 400);
+        }, 300);
+      }
+
+      function setCarouselVerticalAttribute(isVertical) {
         slot1.innerText = "0";
         slot2.innerText = "1";
         slot3.innerText = "-1";
+        carousel.vertical = isVertical;
+        if (isVertical) {
+          const buttons = document.querySelectorAll(".hero-demo button");
+          buttons[0].innerHTML = "&uarr;";
+          buttons[1].innerHTML = "&darr;";
+        } else {
+          const buttons = document.querySelectorAll(".hero-demo button");
+          buttons[0].innerHTML = "&larr;";
+          buttons[1].innerHTML = "&rarr;";
+        }
       }
     </script>
   </body>
