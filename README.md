@@ -4,7 +4,7 @@
 
 # infinite-carousel-wc
 
-An infinite carousel Web Component built with modern CSS and just a little Javascript
+An infinite carousel Web Component built with modern CSS and just a little Javascript. Supports both horizontal and vertical scrolling.
 
 ![infinite-carousel-wc demo](demo.gif)
 
