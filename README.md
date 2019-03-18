@@ -4,7 +4,7 @@
 
 # infinite-carousel-wc
 
-An infinite carousel Web Component built with modern CSS and just a little Javascript
+An infinite carousel Web Component built with modern CSS and just a little Javascript. Supports both horizontal and vertical scrolling.
 
 ![infinite-carousel-wc demo](demo.gif)
 
@@ -66,7 +66,7 @@ Another swipe forward/next would produce:
 
 Swiping/scrolling backward would do the reverse, as you'd expect.
 
-The circular re-ordering allows the user to swipe/scroll "infinitely" in either direction. It is up to the consuming code to listen for the [`next` or `previous` events](#events). For an example of listening to the event and updating the slot contents [take a look at index.html](./example/index.html#L154).
+The circular re-ordering allows the user to swipe/scroll "infinitely" in either direction. It is up to the consuming code to listen for the [`next` or `previous` events](#events). For an example of listening to the event and updating the slot contents [take a look at index.html](./example/index.html#L163).
 
 ### Methods
 
@@ -79,6 +79,12 @@ The circular re-ordering allows the user to swipe/scroll "infinitely" in either 
 
 ### Attributes/Properties
 
+- `vertical`
+  - Add this attribute to make your carousel scroll vertically instead of horizontally.
+    - Example: `<infinite-carousel-wc vertical></infinite-carousel-wc>`
+  - Set the property in Javascript to imperatively set vertical scrolling
+    - Example: `carousel.vertical = true`
+  - NOTE: Dynamically changing this attribute/property will cause a reset of the slot order (with slot 1 being in the "current" position [as described above](#slots)).
 - `lock`
   - Add this attribute to prevent scrolling.
     - Example: `<infinite-carousel-wc lock></infinite-carousel-wc>`
@@ -88,7 +94,6 @@ The circular re-ordering allows the user to swipe/scroll "infinitely" in either 
 ### Events
 
 - `next`
-
   - Raised after the user has scrolled to the next slot
   - Raised about 200ms before the user is allowed to scroll again
   - `event.detail` contains an `ChangeEventDetail` object of the following shape:
@@ -99,7 +104,6 @@ The circular re-ordering allows the user to swipe/scroll "infinitely" in either 
     ```
   - `ChangeEventDetail` is an exported type that you can consume if you are writing your code in Typescript.
   - Example: `carousel.addEventListener("next", handleCarouselNext())`
-
 - `previous`
   - Raised after the user has scrolled to the previous slot
   - Raised about 200ms before the user is allowed to scroll again
@@ -114,7 +118,7 @@ The circular re-ordering allows the user to swipe/scroll "infinitely" in either 
 
 ### Styling
 
-You can style the infinite-carousel-wc element as you would any regular element, in CSS. You can see [an example in example.css](./example/example.css#L12).
+You can style the infinite-carousel-wc element as you would any regular element, in CSS. You can see [an example in example.css](./example/example.css#L32).
 
 ## Contribute
 

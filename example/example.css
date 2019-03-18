@@ -9,20 +9,6 @@
   --code-fg-color: #2c2c2c;
 }
 
-infinite-carousel-wc {
-  width: 100%;
-  height: 300px;
-}
-
-infinite-carousel-wc > div {
-  background-color: var(--primary-accent-color);
-  color: var(--primary-bg-color);
-  font-size: 100px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
 html body {
   font-family: "Helvetica Neue", Helvetica, -apple-system, BlinkMacSystemFont,
     "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue",
@@ -41,6 +27,37 @@ body {
   flex-direction: column;
   justify-items: center;
   align-items: center;
+}
+
+infinite-carousel-wc {
+  width: 100%;
+  height: 300px;
+}
+
+infinite-carousel-wc > div {
+  background-color: var(--primary-accent-color);
+  color: var(--primary-bg-color);
+  font-size: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.hero-demo button {
+  margin-top: 21px;
+  margin: 21px 9px;
+  padding: 21px;
+  border: 0;
+  text-align: center;
+  background-color: var(--primary-accent-color);
+  color: var(--primary-bg-color);
+  font-size: 21px;
+  border-radius: 5px;
+  width: 120px;
+}
+
+input[type="checkbox"] {
+  font-size: 21px;
 }
 
 main {
@@ -65,18 +82,9 @@ section {
 
 .hero-demo {
   padding-top: 50px;
-}
 
-.hero-demo > button {
-  margin-top: 21px;
-  margin: 21px 9px;
-  padding: 21px;
-  text-align: center;
-  background-color: var(--primary-accent-color);
-  color: var(--primary-bg-color);
-  font-size: 21px;
-  border-radius: 5px;
-  width: 120px;
+  animation-duration: 0.3s;
+  animation-fill-mode: both;
 }
 
 .hero-cta {
@@ -86,9 +94,7 @@ section {
 }
 
 h1,
-h2,
-h3,
-h4 {
+h2 {
   margin: 0;
   padding: 0;
   line-height: 1.2;
@@ -107,20 +113,9 @@ h2 {
   font-weight: 600;
 }
 
-h3 {
-  color: var(--primary-accent-color);
-  font-size: 21px;
-  font-weight: 600;
-}
-
-h4 {
-  font-size: 12px;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
 p,
-ul {
+ul,
+label {
   margin: 0;
   color: var(--secondary-fg-color);
   font-size: 16px;
@@ -132,7 +127,7 @@ ul {
 }
 
 .overview {
-  margin-bottom: 38px;
+  margin-bottom: 37px;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 500px));
   grid-gap: 37px;
@@ -165,6 +160,7 @@ ul {
 
 .github-btn {
   padding: 20px;
+  border: 0;
   text-align: center;
   text-transform: uppercase;
   transition: 0.5s;
@@ -196,4 +192,30 @@ a {
   background-position: right center;
 
   cursor: pointer;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.fade-in {
+  animation-name: fadeIn;
+}
+
+.fade-out {
+  animation-name: fadeOut;
 }

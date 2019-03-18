@@ -78,6 +78,7 @@ export class InfiniteCarouselWc extends HTMLElement {
     this._observer.observe(this._slot3);
 
     this.upgradeProperty("lock");
+    this.upgradeProperty("vertical");
   }
 
   disconnectedCallback() {
@@ -85,18 +86,24 @@ export class InfiniteCarouselWc extends HTMLElement {
   }
 
   public goNext() {
-    if (!this._lockScroll) {
+    if (!this._lockScroll && !this.lock) {
       this._scrollContainer.scrollBy({
-        left: this._scrollContainer.clientWidth,
+        left: this.vertical ? undefined : this._scrollContainer.clientWidth,
+        top: this.vertical ? this._scrollContainer.clientHeight : undefined,
         behavior: "smooth"
       });
     }
   }
 
   public goPrevious() {
-    if (!this._lockScroll) {
+    if (!this._lockScroll && !this.lock) {
       this._scrollContainer.scrollBy({
-        left: this._scrollContainer.clientWidth * -1,
+        left: this.vertical
+          ? undefined
+          : this._scrollContainer.clientWidth * -1,
+        top: this.vertical
+          ? this._scrollContainer.clientHeight * -1
+          : undefined,
         behavior: "smooth"
       });
     }
@@ -121,6 +128,23 @@ export class InfiniteCarouselWc extends HTMLElement {
     } else {
       this.removeAttribute("lock");
     }
+  }
+
+  get vertical() {
+    return this.hasAttribute("vertical");
+  }
+
+  set vertical(isVertical) {
+    if (isVertical) {
+      this.setAttribute("vertical", "");
+    } else {
+      this.removeAttribute("vertical");
+    }
+
+    // if the vertical attribute changes then reset the slot order to start
+    // with slot 1
+    this._current = SlotId.Slot1;
+    this.setSlotOrder(SlotId.Slot2, SlotId.Slot1);
   }
 
   private raiseNextEvent(eventDetails: ChangeEventDetail) {
@@ -161,7 +185,7 @@ export class InfiniteCarouselWc extends HTMLElement {
       (oldCurrentSlot === SlotId.Slot1 && newCurrentSlot === SlotId.Slot3);
 
     // disable scrolling while we re-arrange stuff
-    this._scrollContainer.classList.add("no-x-scroll");
+    this._scrollContainer.classList.add("no-scroll");
 
     // emit event
     if (isPrevious) {
@@ -182,10 +206,15 @@ export class InfiniteCarouselWc extends HTMLElement {
           this._slot2.classList.remove("previous");
           this._slot2.classList.add("next");
           this._slot2.classList.remove("current");
-          this._scrollContainer.scrollLeft = this._slot3.clientWidth;
+
+          if (this.vertical) {
+            this._scrollContainer.scrollTop = this._slot3.clientHeight;
+          } else {
+            this._scrollContainer.scrollLeft = this._slot3.clientWidth;
+          }
 
           this._lockScroll = false;
-          this._scrollContainer.classList.remove("no-x-scroll");
+          this._scrollContainer.classList.remove("no-scroll");
         }, Constants.DebounceTimeout);
         break;
       case SlotId.Slot2:
@@ -199,10 +228,14 @@ export class InfiniteCarouselWc extends HTMLElement {
           this._slot2.classList.remove("previous");
           this._slot2.classList.remove("next");
           this._slot2.classList.add("current");
-          this._scrollContainer.scrollLeft = this._slot1.clientWidth;
+          if (this.vertical) {
+            this._scrollContainer.scrollTop = this._slot1.clientHeight;
+          } else {
+            this._scrollContainer.scrollLeft = this._slot1.clientWidth;
+          }
 
           this._lockScroll = false;
-          this._scrollContainer.classList.remove("no-x-scroll");
+          this._scrollContainer.classList.remove("no-scroll");
         }, Constants.DebounceTimeout);
         break;
       case SlotId.Slot3:
@@ -216,14 +249,18 @@ export class InfiniteCarouselWc extends HTMLElement {
           this._slot2.classList.add("previous");
           this._slot2.classList.remove("next");
           this._slot2.classList.remove("current");
-          this._scrollContainer.scrollLeft = this._slot2.clientWidth;
+          if (this.vertical) {
+            this._scrollContainer.scrollTop = this._slot2.clientHeight;
+          } else {
+            this._scrollContainer.scrollLeft = this._slot2.clientWidth;
+          }
 
           this._lockScroll = false;
-          this._scrollContainer.classList.remove("no-x-scroll");
+          this._scrollContainer.classList.remove("no-scroll");
         }, Constants.DebounceTimeout);
         break;
       default:
-        throw `this._current has bad value: ${this._current}`;
+        throw `newCurrentSlot has bad value: ${newCurrentSlot}`;
     }
   }
 }
