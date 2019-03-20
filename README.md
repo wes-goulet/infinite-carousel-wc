@@ -12,7 +12,7 @@ An infinite carousel Web Component built with modern CSS and just a little Javas
 
 ## Installation
 
-You can integrate infinite-carousel-wc via `<script>` tag or via ES Modules.
+You can integrate infinite-carousel-wc via `<script>` tag or via NPM.
 
 ### Via `<script>` tag
 
@@ -24,13 +24,27 @@ In the `<head>` of your index.html put a script tag like this:
 
 Now you can use the `infinite-carousel-wc` element anywhere in your html, JSX, template, etc.
 
-### Via ES Modules
+### Via NPM
 
 ```bash
 npm install infinite-carousel-wc --save
 ```
 
-You can see an example of a React app consuming a web component [here](https://github.com/wes566/wc-menu-button#react-example).
+And then you need to import the module before you can use it in your html/jsx/template:
+
+```js
+import "infinite-carousel-wc";
+```
+
+NOTE: If you are using (p)react JSX and typescript you might get an error about `<infinite-carousel-wc>` being an unknown type. Until [issue #7 is fixed](https://github.com/wes566/infinite-carousel-wc/issues/7) you can add a type declaration like:
+
+```ts
+declare namespace JSX {
+  interface IntrinsicElements {
+    "infinite-carousel-wc": any;
+  }
+}
+```
 
 ## Polyfills
 
