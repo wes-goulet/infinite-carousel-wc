@@ -12,7 +12,7 @@ An infinite carousel Web Component built with modern CSS and just a little Javas
 
 ## Installation
 
-You can integrate infinite-carousel-wc via `<script>` tag or via ES Modules.
+You can integrate infinite-carousel-wc via `<script>` tag or via NPM.
 
 ### Via `<script>` tag
 
