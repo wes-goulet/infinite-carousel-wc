@@ -122,7 +122,7 @@ export class InfiniteCarouselWc extends HTMLElement {
 
   /**
    * Resets the slot order so that slot 1 is in the "current" position, slot 2
-   *  is in the "next" position, and slot 3 is in the "previous" position.
+   * is in the "next" position, and slot 3 is in the "previous" position.
    *
    * @memberof InfiniteCarouselWc
    */
