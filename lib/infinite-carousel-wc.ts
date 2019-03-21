@@ -44,6 +44,7 @@ export class InfiniteCarouselWc extends HTMLElement {
     this.raisePreviousEvent.bind(this);
     this.goNext.bind(this);
     this.goPrevious.bind(this);
+    this.reset.bind(this);
 
     const shadowRoot = this.attachShadow({ mode: "open" });
     shadowRoot.appendChild(templateElement.content.cloneNode(true));
@@ -85,6 +86,11 @@ export class InfiniteCarouselWc extends HTMLElement {
     this._observer.disconnect();
   }
 
+  /**
+   * Goes to the next slot in the carousel.
+   *
+   * @memberof InfiniteCarouselWc
+   */
   public goNext() {
     if (!this._lockScroll && !this.lock) {
       this._scrollContainer.scrollBy({
@@ -95,6 +101,11 @@ export class InfiniteCarouselWc extends HTMLElement {
     }
   }
 
+  /**
+   * Goes to the previous slot in the carousel.
+   *
+   * @memberof InfiniteCarouselWc
+   */
   public goPrevious() {
     if (!this._lockScroll && !this.lock) {
       this._scrollContainer.scrollBy({
@@ -107,6 +118,17 @@ export class InfiniteCarouselWc extends HTMLElement {
         behavior: "smooth"
       });
     }
+  }
+
+  /**
+   * Resets the slot order so that slot 1 is in the "current" position, slot 2
+   *  is in the "next" position, and slot 3 is in the "previous" position.
+   *
+   * @memberof InfiniteCarouselWc
+   */
+  public reset() {
+    this._current = SlotId.Slot1;
+    this.setSlotOrder(SlotId.Slot2, SlotId.Slot1);
   }
 
   // from https://developers.google.com/web/fundamentals/web-components/best-practices#lazy-properties
@@ -143,8 +165,7 @@ export class InfiniteCarouselWc extends HTMLElement {
 
     // if the vertical attribute changes then reset the slot order to start
     // with slot 1
-    this._current = SlotId.Slot1;
-    this.setSlotOrder(SlotId.Slot2, SlotId.Slot1);
+    this.reset();
   }
 
   private raiseNextEvent(eventDetails: ChangeEventDetail) {
