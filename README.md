@@ -90,6 +90,9 @@ The circular re-ordering allows the user to swipe/scroll "infinitely" in either 
 - `goPrevious()`
   - Scrolls to the previous slot.
   - Example: `document.getElementById("carousel").goPrevious()`
+- `reset()`
+  - Resets the slot order to the initial order. Slot 1 will be in the "current" position, slot 2 will be in the "next" position, and slot 3 will be in the "previous" position.
+  - Example: `document.getElementById("carousel").reset()`
 
 ### Attributes/Properties
 
@@ -98,7 +101,7 @@ The circular re-ordering allows the user to swipe/scroll "infinitely" in either 
     - Example: `<infinite-carousel-wc vertical></infinite-carousel-wc>`
   - Set the property in Javascript to imperatively set vertical scrolling
     - Example: `carousel.vertical = true`
-  - NOTE: Dynamically changing this attribute/property will cause a reset of the slot order (with slot 1 being in the "current" position [as described above](#slots)).
+  - NOTE: Dynamically changing this attribute/property will cause a reset of the slot order (it calls the `reset()` method).
 - `lock`
   - Add this attribute to prevent scrolling.
     - Example: `<infinite-carousel-wc lock></infinite-carousel-wc>`
