@@ -21,7 +21,33 @@ const esm = {
   ],
   input: "lib/infinite-carousel-wc.ts",
   output: {
-    file: "dist/infinite-carousel-wc.mjs",
+    file: "dist/esm/infinite-carousel-wc.js",
+    format: "esm"
+  }
+};
+
+const esmMin = {
+  plugins: [
+    typescript({
+      useTsconfigDeclarationDir: false
+    }),
+    postcss({
+      plugins: [autoprefixer()],
+      sourceMap: false,
+      extensions: [".css"],
+      inject: false,
+      minimize: true
+    }),
+    string({
+      include: "**/template.html"
+    }),
+    terser({
+      compress: { ecma: 6 }
+    })
+  ],
+  input: "lib/infinite-carousel-wc.ts",
+  output: {
+    file: "dist/esm/infinite-carousel-wc.min.js",
     format: "esm"
   }
 };
@@ -43,7 +69,7 @@ const iife = {
   ],
   input: "lib/infinite-carousel-wc.ts",
   output: {
-    file: "dist/infinite-carousel-wc.js",
+    file: "dist/iife/infinite-carousel-wc.js",
     format: "iife",
     name: "InfiniteCarouselWc"
   }
@@ -70,10 +96,10 @@ const iifeMin = {
   ],
   input: "lib/infinite-carousel-wc.ts",
   output: {
-    file: "dist/infinite-carousel-wc.min.js",
+    file: "dist/iife/infinite-carousel-wc.min.js",
     format: "iife",
     name: "InfiniteCarouselWc"
   }
 };
 
-export default [esm, iife, iifeMin];
+export default [esm, esmMin, iife, iifeMin];

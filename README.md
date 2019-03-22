@@ -1,4 +1,4 @@
-[![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg?style=flat-square)](https://www.webcomponents.org/element/infinite-carousel-wc)
+[![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg?style=flat-square)](https://www.webcomponents.org/element/infinite-carousel-wc) [![npm](https://img.shields.io/npm/v/infinite-carousel-wc.svg)](https://npmjs.org/package/infinite-carousel-wc)
 
 [![CircleCI](https://circleci.com/gh/wes566/infinite-carousel-wc.svg?style=svg)](https://circleci.com/gh/wes566/infinite-carousel-wc)
 
@@ -19,7 +19,14 @@ You can integrate infinite-carousel-wc via `<script>` tag or via NPM.
 In the `<head>` of your index.html put a script tag like this:
 
 ```html
-<script src="https://unpkg.com/infinite-carousel-wc/dist/infinite-carousel-wc.min.js"></script>
+<script
+  type="module"
+  src="https://unpkg.com/infinite-carousel-wc/dist/esm/infinite-carousel-wc.min.js"
+></script>
+<script
+  nomodule
+  src="https://unpkg.com/infinite-carousel-wc/dist/iife/infinite-carousel-wc.min.js"
+></script>
 ```
 
 Now you can use the `infinite-carousel-wc` element anywhere in your html, JSX, template, etc.
