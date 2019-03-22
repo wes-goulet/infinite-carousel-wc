@@ -43,16 +43,6 @@ And then you need to import the module before you can use it in your html/jsx/te
 import "infinite-carousel-wc";
 ```
 
-NOTE: If you are using (p)react JSX and typescript you might get an error about `<infinite-carousel-wc>` being an unknown type. Until [issue #7 is fixed](https://github.com/wes566/infinite-carousel-wc/issues/7) you can add a type declaration like:
-
-```ts
-declare namespace JSX {
-  interface IntrinsicElements {
-    "infinite-carousel-wc": any;
-  }
-}
-```
-
 ## Polyfills
 
 This custom element uses [CSS Scroll Snap](https://caniuse.com/#feat=css-snappoints), [IntersectionObserver](https://caniuse.com/#feat=intersectionobserver) and [Smooth Scrolling](https://caniuse.com/#feat=css-scroll-behavior). Browser support for Scroll Snap is pretty good (this custom element supports both v0 and v1 of the spec). There is a polyfill for [IntersectionObserver](https://github.com/w3c/IntersectionObserver/tree/master/polyfill) and [Smooth Scrolling](https://github.com/iamdustan/smoothscroll).

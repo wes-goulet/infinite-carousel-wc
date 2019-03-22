@@ -287,3 +287,14 @@ export class InfiniteCarouselWc extends HTMLElement {
 }
 
 customElements.define("infinite-carousel-wc", InfiniteCarouselWc);
+
+// JSX Type Declaration - using 'any' for now just so things will
+// compile. Need to decide if we want to bring in a dep on (p)react
+// so that we can properly extend HTMLAttributes JSX interface.
+declare global {
+  namespace JSX {
+    interface IntrinsicElements {
+      "infinite-carousel-wc": any;
+    }
+  }
+}
