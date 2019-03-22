@@ -33,7 +33,7 @@ const esmMin = {
     }),
     postcss({
       plugins: [autoprefixer()],
-      sourceMap: true,
+      sourceMap: false,
       extensions: [".css"],
       inject: false,
       minimize: true
