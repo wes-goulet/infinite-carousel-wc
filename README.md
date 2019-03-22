@@ -1,4 +1,4 @@
-[![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg?style=flat-square)](https://www.webcomponents.org/element/infinite-carousel-wc) ![npm](https://img.shields.io/npm/v/infinite-carousel-wc.svg)
+[![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg?style=flat-square)](https://www.webcomponents.org/element/infinite-carousel-wc) [![npm](https://img.shields.io/npm/v/infinite-carousel-wc.svg)](https://npmjs.org/package/infinite-carousel-wc)
 
 [![CircleCI](https://circleci.com/gh/wes566/infinite-carousel-wc.svg?style=svg)](https://circleci.com/gh/wes566/infinite-carousel-wc) [![Netlify Status](https://api.netlify.com/api/v1/badges/3afd934a-e7a4-40e1-b47f-f0e571ba218d/deploy-status)](https://app.netlify.com/sites/infinite-carousel-wc/deploys)
 
