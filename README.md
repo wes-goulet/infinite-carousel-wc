@@ -43,11 +43,15 @@ And then you need to import the module before you can use it in your html/jsx/te
 import "infinite-carousel-wc";
 ```
 
+## Web Component Browser Support
+
+This web component uses [HTML templates](https://caniuse.com/#feat=template), the [shadow DOM](https://caniuse.com/#feat=shadowdomv1), and [custom elements](https://caniuse.com/#feat=custom-elementsv1). If you need to polyfill for any of these standards then [take a look at the web components polyfill](https://github.com/webcomponents/webcomponentsjs).
+
 ## Polyfills
 
 This custom element uses [CSS Scroll Snap](https://caniuse.com/#feat=css-snappoints), [IntersectionObserver](https://caniuse.com/#feat=intersectionobserver) and [Smooth Scrolling](https://caniuse.com/#feat=css-scroll-behavior). Browser support for Scroll Snap is pretty good (this custom element supports both v0 and v1 of the spec). There is a polyfill for [IntersectionObserver](https://github.com/w3c/IntersectionObserver/tree/master/polyfill) and [Smooth Scrolling](https://github.com/iamdustan/smoothscroll).
 
-A note about IntersectionObserver polyfill on iOS: you might need to [configure the polyfill to use polling](https://github.com/w3c/IntersectionObserver/tree/master/polyfill#configuring-the-polyfill) for the carousel to work properly.
+A note about IntersectionObserver polyfill on iOS 12.1 and below: you might need to [configure the polyfill to use polling](https://github.com/w3c/IntersectionObserver/tree/master/polyfill#configuring-the-polyfill) for the carousel to work properly.
 
 ## API and Customization
 
