@@ -19,11 +19,7 @@ In the `<head>` of your index.html put a script tag like this:
 ```html
 <script
   type="module"
-  src="https://unpkg.com/infinite-carousel-wc/dist/esm/infinite-carousel-wc.min.js"
-></script>
-<script
-  nomodule
-  src="https://unpkg.com/infinite-carousel-wc/dist/iife/infinite-carousel-wc.min.js"
+  src="https://unpkg.com/infinite-carousel-wc/infinite-carousel-wc.js"
 ></script>
 ```
 
