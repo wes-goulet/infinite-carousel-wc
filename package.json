@@ -1,7 +1,17 @@
 {
   "name": "infinite-carousel-wc",
-  "version": "0.4.1",
+  "version": "0.5.0",
   "description": "A small, infinite carousel Web Component built with modern CSS and just a little Javascript",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wes566/infinite-carousel-wc"
+  },
+  "author": "Wes Peter",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/wes566/infinite-carousel-wc"
+  },
+  "homepage": "https://github.com/wes566/infinite-carousel-wc",
   "keywords": [
     "web component",
     "carousel",
@@ -12,41 +22,29 @@
     "web-component",
     "custom-element"
   ],
-  "module": "dist/esm/infinite-carousel-wc.mjs",
-  "main": "dist/esm/infinite-carousel-wc.js",
-  "source": "lib/infinite-carousel-wc.ts",
-  "types": "dist/esm/infinite-carousel-wc.d.ts",
+  "module": "infinite-carousel-wc.js",
+  "main": "infinite-carousel-wc.js",
+  "source": "infinite-carousel-wc.js",
+  "types": "infinite-carousel-wc.d.ts",
   "scripts": {
-    "build": "rollup -c && cp ./dist/esm/infinite-carousel-wc.js ./example/infinite-carousel-wc.esm.js && cp ./dist/iife/infinite-carousel-wc.js ./example/infinite-carousel-wc.iife.js",
-    "rollup-watch": "rollup -c --watch",
-    "serve": "live-server ./example",
-    "copy-watch-esm": "onchange -v \"dist/esm/infinite-carousel-wc.js\" -- cp ./dist/esm/infinite-carousel-wc.js ./example/infinite-carousel-wc.esm.js",
-    "copy-watch-iife": "onchange -v \"dist/iife/infinite-carousel-wc.js\" -- cp ./dist/iife/infinite-carousel-wc.js ./example/infinite-carousel-wc.iife.js",
-    "start": "npm-run-all --parallel rollup-watch serve copy-watch-esm copy-watch-iife",
-    "clean": "rm -rf dist",
     "prepare": "npm run build",
-    "gzip-check": "npx gzip-size-cli dist/esm/infinite-carousel-wc.min.js"
+    "build": "tsc && npm run minify",
+    "minify": "terser infinite-carousel-wc.js -o infinite-carousel-wc.min.js -c -m",
+    "lint": "npm run lint:formatting && npm run lint:size",
+    "lint:formatting": "prettier --check .",
+    "lint:size": "bundlesize",
+    "fix:formatting": "prettier --write ."
   },
   "devDependencies": {
-    "autoprefixer": "^9.4.5",
-    "live-server": "^1.2.1",
-    "npm-run-all": "^4.1.5",
-    "onchange": "^5.2.0",
-    "rollup": "^1.1.0",
-    "rollup-plugin-postcss": "^2.0.3",
-    "rollup-plugin-string": "^2.0.2",
-    "rollup-plugin-terser": "^4.0.2",
-    "rollup-plugin-typescript2": "^0.21.1",
-    "typescript": "^3.2.2"
+    "bundlesize": "^0.18.0",
+    "prettier": "^2.1.2",
+    "terser": "^5.3.5",
+    "typescript": "^4.0.3"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/wes566/infinite-carousel-wc"
-  },
-  "author": "Wes Peter",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/wes566/infinite-carousel-wc"
-  },
-  "homepage": "https://github.com/wes566/infinite-carousel-wc"
+  "bundlesize": [
+    {
+      "path": "./infinite-carousel-wc.min.js",
+      "maxSize": "2 kB"
+    }
+  ]
 }

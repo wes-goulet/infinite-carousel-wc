@@ -1,21 +1,88 @@
-// @ts-ignore
-import style from "./style.css";
-// @ts-ignore
-import template from "./template.html";
+// @ts-check
 
-enum Constants {
-  DebounceTimeout = 200
+/**
+ * @typedef {1 | 2 | 3} SlotId
+ * @typedef {{ newCurrent: SlotId }} ChangeEventDetail
+ */
+
+const style = `
+#s {
+  height: inherit;
+  width: inherit;
+  display: flex;
+  -webkit-overflow-scrolling: touch;
+  -ms-overflow-style: none;
+  overflow: -moz-scrollbars-none;
 }
 
-enum SlotId {
-  Slot1 = 1,
-  Slot2 = 2,
-  Slot3 = 3
+#s::-webkit-scrollbar {
+  display: none;
 }
 
-export interface ChangeEventDetail {
-  newCurrent: 1 | 2 | 3;
+:host(:not([vertical])) #s {
+  flex-direction: row;
+  scroll-snap-coordinate: 0 0;
+  scroll-snap-points-x: repeat(100%);
+  scroll-snap-type: x mandatory;
+  overflow-x: auto;
 }
+
+:host([vertical]) #s {
+  flex-direction: column;
+  scroll-snap-coordinate: 0 0;
+  scroll-snap-points-y: repeat(100%);
+  scroll-snap-type: y mandatory;
+  overflow-y: auto;
+}
+
+#s > div {
+  width: 100%;
+  height: 100%;
+  flex: none;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+}
+
+:host([lock]:not([vertical])) #s {
+  overflow-x: hidden;
+}
+
+:host([lock][vertical]) #s {
+  overflow-y: hidden;
+}
+
+::slotted(*) {
+  width: 100%;
+  height: 100%;
+}
+
+.previous {
+  order: 1;
+}
+
+.current {
+  order: 2;
+}
+
+.next {
+  order: 3;
+}
+
+.no-scroll {
+  overflow-x: hidden !important;
+  overflow-y: hidden !important;
+}
+`;
+
+const template = `
+<div id="s">
+  <div id="1"><slot name="1"></slot></div>
+  <div id="2"><slot name="2"></slot></div>
+  <div id="3"><slot name="3"></slot></div>
+</div>
+`;
+
+const DEBOUNCE_TIMEOUT = 200;
 
 // using a template so it only needs to be parsed once, whereas setting
 // innerHTML directly in the custom element ctor means the HTML would get parsed
@@ -24,17 +91,6 @@ const templateElement = document.createElement("template");
 templateElement.innerHTML = `<style>${style}</style>${template}`;
 
 export class InfiniteCarouselWc extends HTMLElement {
-  _observer: IntersectionObserver;
-  _slot1: Element;
-  _slot2: Element;
-  _slot3: Element;
-  _scrollContainer: Element;
-  _current: SlotId;
-  _lockScroll: boolean = false;
-
-  // Explicitly let TS know any type can come from index signature
-  [key: string]: any;
-
   constructor() {
     super();
 
@@ -49,23 +105,31 @@ export class InfiniteCarouselWc extends HTMLElement {
     const shadowRoot = this.attachShadow({ mode: "open" });
     shadowRoot.appendChild(templateElement.content.cloneNode(true));
 
-    this._scrollContainer = this.shadowRoot!.getElementById("s")!;
-    this._slot1 = this.shadowRoot!.getElementById("1")!;
-    this._slot2 = this.shadowRoot!.getElementById("2")!;
-    this._slot3 = this.shadowRoot!.getElementById("3")!;
+    this._scrollContainer = this.shadowRoot.getElementById("s");
+    this._slot1 = this.shadowRoot.getElementById("1");
+    this._slot2 = this.shadowRoot.getElementById("2");
+    this._slot3 = this.shadowRoot.getElementById("3");
 
     // slot 2 starts in the middle, although our intersection observer will
     // immediately set slot 1 to current... but we want to init this to 2
-    this._current = SlotId.Slot2;
+    /** @type {1 | 2 | 3 | undefined}} */
+    this._current = undefined;
 
+    /** @type {IntersectionObserver} */
     this._observer = new IntersectionObserver(
       (entries, _observer) => {
-        for (let entry of entries) {
+        for (let i = 0, len = entries.length; i < len; i++) {
+          const entry = entries[i];
           if (entry.intersectionRatio === 1) {
-            const oldCurrent = this._current;
-            this._current = Number(entry.target.getAttribute("id"));
-            this.setSlotOrder(oldCurrent, this._current);
-            break;
+            const newCurrent = /** @type {1 | 2 | 3} */ (Number(
+              entry.target.getAttribute("id")
+            ));
+            if (newCurrent !== this._current) {
+              const oldCurrent = this._current;
+              this._current = newCurrent;
+              this.setSlotOrder(oldCurrent, this._current);
+              break;
+            }
           }
         }
       },
@@ -91,12 +155,12 @@ export class InfiniteCarouselWc extends HTMLElement {
    *
    * @memberof InfiniteCarouselWc
    */
-  public goNext() {
+  goNext() {
     if (!this._lockScroll && !this.lock) {
       this._scrollContainer.scrollBy({
         left: this.vertical ? undefined : this._scrollContainer.clientWidth,
         top: this.vertical ? this._scrollContainer.clientHeight : undefined,
-        behavior: "smooth"
+        behavior: "smooth",
       });
     }
   }
@@ -106,7 +170,7 @@ export class InfiniteCarouselWc extends HTMLElement {
    *
    * @memberof InfiniteCarouselWc
    */
-  public goPrevious() {
+  goPrevious() {
     if (!this._lockScroll && !this.lock) {
       this._scrollContainer.scrollBy({
         left: this.vertical
@@ -115,7 +179,7 @@ export class InfiniteCarouselWc extends HTMLElement {
         top: this.vertical
           ? this._scrollContainer.clientHeight * -1
           : undefined,
-        behavior: "smooth"
+        behavior: "smooth",
       });
     }
   }
@@ -126,18 +190,31 @@ export class InfiniteCarouselWc extends HTMLElement {
    *
    * @memberof InfiniteCarouselWc
    */
-  public reset() {
-    this._current = SlotId.Slot1;
-    this.setSlotOrder(SlotId.Slot2, SlotId.Slot1);
+  reset() {
+    this._current = 1;
+    this.setSlotOrder(2, 1);
   }
 
   // from https://developers.google.com/web/fundamentals/web-components/best-practices#lazy-properties
-  private upgradeProperty(prop: string) {
+  /**
+   * @param {string} prop
+   *
+   * @memberOf InfiniteCarouselWc
+   */
+  upgradeProperty(prop) {
     if (this.hasOwnProperty(prop)) {
       let value = this[prop];
       delete this[prop];
       this[prop] = value;
     }
+  }
+
+  get currentSlot() {
+    if (this._current === undefined) {
+      return 1;
+    }
+
+    return this._current;
   }
 
   get lock() {
@@ -168,25 +245,42 @@ export class InfiniteCarouselWc extends HTMLElement {
     this.reset();
   }
 
-  private raiseNextEvent(eventDetails: ChangeEventDetail) {
+  /**
+   * @param {ChangeEventDetail} eventDetails
+   *
+   * @memberOf InfiniteCarouselWc
+   */
+  raiseNextEvent(eventDetails) {
     this.dispatchEvent(
       new CustomEvent("next", {
         bubbles: true,
-        detail: eventDetails
+        detail: eventDetails,
       })
     );
   }
 
-  private raisePreviousEvent(eventDetails: ChangeEventDetail) {
+  /**
+   * @param {ChangeEventDetail} eventDetails
+   *
+   * @memberOf InfiniteCarouselWc
+   */
+  raisePreviousEvent(eventDetails) {
     this.dispatchEvent(
       new CustomEvent("previous", {
         bubbles: true,
-        detail: eventDetails
+        detail: eventDetails,
       })
     );
   }
 
-  private setSlotOrder(oldCurrentSlot: SlotId, newCurrentSlot: SlotId) {
+  /**
+   * @param {SlotId} oldCurrentSlot
+   * @param {SlotId} newCurrentSlot
+   * @returns
+   *
+   * @memberOf InfiniteCarouselWc
+   */
+  setSlotOrder(oldCurrentSlot, newCurrentSlot) {
     if (oldCurrentSlot === newCurrentSlot || this._lockScroll) {
       return;
     }
@@ -201,23 +295,34 @@ export class InfiniteCarouselWc extends HTMLElement {
     // to update the slot content.
 
     const isPrevious =
-      (oldCurrentSlot === SlotId.Slot2 && newCurrentSlot === SlotId.Slot1) ||
-      (oldCurrentSlot === SlotId.Slot3 && newCurrentSlot === SlotId.Slot2) ||
-      (oldCurrentSlot === SlotId.Slot1 && newCurrentSlot === SlotId.Slot3);
+      (oldCurrentSlot === 2 && newCurrentSlot === 1) ||
+      (oldCurrentSlot === 3 && newCurrentSlot === 2) ||
+      (oldCurrentSlot === 1 && newCurrentSlot === 3);
 
     // disable scrolling while we re-arrange stuff
     this._scrollContainer.classList.add("no-scroll");
 
+    this._observer.unobserve(this._slot1);
+    this._observer.unobserve(this._slot2);
+    this._observer.unobserve(this._slot3);
+
     // emit event
-    if (isPrevious) {
-      this.raisePreviousEvent({ newCurrent: newCurrentSlot });
-    } else {
-      this.raiseNextEvent({ newCurrent: newCurrentSlot });
-    }
+    // if (isPrevious) {
+    //   this.raisePreviousEvent({ newCurrent: newCurrentSlot });
+    // } else {
+    //   this.raiseNextEvent({ newCurrent: newCurrentSlot });
+    // }
 
     switch (newCurrentSlot) {
-      case SlotId.Slot1:
+      case 1:
         setTimeout(() => {
+          // emit event
+          if (isPrevious) {
+            this.raisePreviousEvent({ newCurrent: newCurrentSlot });
+          } else {
+            this.raiseNextEvent({ newCurrent: newCurrentSlot });
+          }
+
           this._slot1.classList.remove("previous");
           this._slot1.classList.remove("next");
           this._slot1.classList.add("current");
@@ -234,12 +339,23 @@ export class InfiniteCarouselWc extends HTMLElement {
             this._scrollContainer.scrollLeft = this._slot3.clientWidth;
           }
 
+          // this._observer.observe(this._slot1);
+          this._observer.observe(this._slot2);
+          this._observer.observe(this._slot3);
+
           this._lockScroll = false;
           this._scrollContainer.classList.remove("no-scroll");
-        }, Constants.DebounceTimeout);
+        }, DEBOUNCE_TIMEOUT);
         break;
-      case SlotId.Slot2:
+      case 2:
         setTimeout(() => {
+          // emit event
+          if (isPrevious) {
+            this.raisePreviousEvent({ newCurrent: newCurrentSlot });
+          } else {
+            this.raiseNextEvent({ newCurrent: newCurrentSlot });
+          }
+
           this._slot1.classList.add("previous");
           this._slot1.classList.remove("next");
           this._slot1.classList.remove("current");
@@ -255,12 +371,23 @@ export class InfiniteCarouselWc extends HTMLElement {
             this._scrollContainer.scrollLeft = this._slot1.clientWidth;
           }
 
+          this._observer.observe(this._slot1);
+          // this._observer.observe(this._slot2);
+          this._observer.observe(this._slot3);
+
           this._lockScroll = false;
           this._scrollContainer.classList.remove("no-scroll");
-        }, Constants.DebounceTimeout);
+        }, DEBOUNCE_TIMEOUT);
         break;
-      case SlotId.Slot3:
+      case 3:
         setTimeout(() => {
+          // emit event
+          if (isPrevious) {
+            this.raisePreviousEvent({ newCurrent: newCurrentSlot });
+          } else {
+            this.raiseNextEvent({ newCurrent: newCurrentSlot });
+          }
+
           this._slot1.classList.remove("previous");
           this._slot1.classList.add("next");
           this._slot1.classList.remove("current");
@@ -276,9 +403,13 @@ export class InfiniteCarouselWc extends HTMLElement {
             this._scrollContainer.scrollLeft = this._slot2.clientWidth;
           }
 
+          this._observer.observe(this._slot1);
+          this._observer.observe(this._slot2);
+          // this._observer.observe(this._slot3);
+
           this._lockScroll = false;
           this._scrollContainer.classList.remove("no-scroll");
-        }, Constants.DebounceTimeout);
+        }, DEBOUNCE_TIMEOUT);
         break;
       default:
         throw `newCurrentSlot has bad value: ${newCurrentSlot}`;
@@ -287,14 +418,3 @@ export class InfiniteCarouselWc extends HTMLElement {
 }
 
 customElements.define("infinite-carousel-wc", InfiniteCarouselWc);
-
-// JSX Type Declaration - using 'any' for now just so things will
-// compile. Need to decide if we want to bring in a dep on (p)react
-// so that we can properly extend HTMLAttributes JSX interface.
-declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      "infinite-carousel-wc": any;
-    }
-  }
-}

@@ -1,6 +1,4 @@
-[![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg?style=flat-square)](https://www.webcomponents.org/element/infinite-carousel-wc) [![npm](https://img.shields.io/npm/v/infinite-carousel-wc.svg)](https://npmjs.org/package/infinite-carousel-wc)
-
-[![CircleCI](https://circleci.com/gh/wes566/infinite-carousel-wc.svg?style=svg)](https://circleci.com/gh/wes566/infinite-carousel-wc)
+![Build](https://github.com/wes566/infinite-carousel-wc/workflows/Build/badge.svg) [![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg?style=flat-square)](https://www.webcomponents.org/element/infinite-carousel-wc) [![npm](https://img.shields.io/npm/v/infinite-carousel-wc.svg)](https://npmjs.org/package/infinite-carousel-wc) [![Dependencies Status](https://david-dm.org/wes566/wc-menu-button/status.svg)](https://david-dm.org/wes566/infinite-carousel-wc)
 
 # infinite-carousel-wc
 
@@ -81,7 +79,7 @@ Another swipe forward/next would produce:
 
 Swiping/scrolling backward would do the reverse, as you'd expect.
 
-The circular re-ordering allows the user to swipe/scroll "infinitely" in either direction. It is up to the consuming code to listen for the [`next` or `previous` events](#events). For an example of listening to the event and updating the slot contents [take a look at index.html](./example/index.html#L163).
+The circular re-ordering allows the user to swipe/scroll "infinitely" in either direction. It is up to the consuming code to listen for the [`next` or `previous` events](#events). For an example of listening to the event and updating the slot contents [take a look at index.html](./index.html#L387).
 
 ### Methods
 
@@ -108,6 +106,9 @@ The circular re-ordering allows the user to swipe/scroll "infinitely" in either 
     - Example: `<infinite-carousel-wc lock></infinite-carousel-wc>`
   - Set the property in Javascript to imperatively disable scrolling
     - Example: `carousel.lock = true`
+- `currentSlot`
+  - This property will return the current slot being shown.
+  - You cannot set this property programmatically nor can you set it as an attribute.
 
 ### Events
 
@@ -136,15 +137,16 @@ The circular re-ordering allows the user to swipe/scroll "infinitely" in either 
 
 ### Styling
 
-You can style the infinite-carousel-wc element as you would any regular element, in CSS. You can see [an example in example.css](./example/example.css#L32).
+You can style the infinite-carousel-wc element as you would any regular element, in CSS. You can see [an example in index.html](./index.html#L59).
 
 ## Contribute
 
-This project is built with standard HTML/CSS/TS, no frameworks or special web-component compilers here (for maximum simplicity and minimum size). If you want to learn more about writing custom elements see [MDN](https://developer.mozilla.org/en-US/docs/Web/Web_Components/Using_custom_elements) or [this web fundamentals page](https://developers.google.com/web/fundamentals/web-components/).
+This project is built with standard HTML/CSS/JS, no frameworks or special web-component compilers here (for maximum simplicity and minimum size). If you want to learn more about writing custom elements see [MDN](https://developer.mozilla.org/en-US/docs/Web/Web_Components/Using_custom_elements) or [this web fundamentals page](https://developers.google.com/web/fundamentals/web-components/).
+
+The source for this web component is contained in [infinite-carousel-wc.js](infinite-carousel-wc.js) and example usage is in [index.html](index.html). To debug/run the example you can just open index.html in a browser. For a hot-reload developer experience try [using live server in vscode](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer).
+
+You will need the dev dependencies of this project installed to run the post-commit hooks.
 
 ```bash
 npm install
-npm start
 ```
-
-This will start a live-server on port localhost:8080. Any changes you make to files in lib/ or any changes to example/index.html should get live reloaded.
