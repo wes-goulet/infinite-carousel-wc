@@ -21,6 +21,12 @@ In the `<head>` of your index.html put a script tag like this:
   type="module"
   src="https://unpkg.com/infinite-carousel-wc/infinite-carousel-wc.js"
 ></script>
+
+<!-- Or use the minified version -->
+<script
+  type="module"
+  src="https://unpkg.com/infinite-carousel-wc/infinite-carousel-wc.min.js"
+></script>
 ```
 
 Now you can use the `infinite-carousel-wc` element anywhere in your html, JSX, template, etc.
