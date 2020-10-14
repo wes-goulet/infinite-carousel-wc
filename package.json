@@ -1,6 +1,6 @@
 {
   "name": "infinite-carousel-wc",
-  "version": "0.5.2",
+  "version": "0.5.3",
   "description": "A small, infinite carousel Web Component built with modern CSS and just a little Javascript",
   "repository": {
     "type": "git",
@@ -41,6 +41,11 @@
     "terser": "^5.3.5",
     "typescript": "^4.0.3"
   },
+  "files": [
+    "infinite-carousel-wc.js",
+    "infinite-carousel-wc.min.js",
+    "infinite-carousel-wc.d.ts"
+  ],
   "bundlesize": [
     {
       "path": "./infinite-carousel-wc.min.js",
