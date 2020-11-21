@@ -48,7 +48,8 @@
   ],
   "exports": {
     ".": {
-      "import": "./infinite-carousel-wc.js"
+      "import": "./infinite-carousel-wc.js",
+      "default": "./infinite-carousel-wc.js"
     }
   },
   "bundlesize": [
