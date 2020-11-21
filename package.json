@@ -46,6 +46,11 @@
     "infinite-carousel-wc.min.js",
     "infinite-carousel-wc.d.ts"
   ],
+  "exports": {
+    ".": {
+      "import": "./infinite-carousel-wc.js"
+    }
+  },
   "bundlesize": [
     {
       "path": "./infinite-carousel-wc.min.js",
