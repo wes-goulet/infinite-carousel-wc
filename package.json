@@ -1,17 +1,7 @@
 {
   "name": "infinite-carousel-wc",
-  "version": "0.5.3",
+  "version": "0.5.4",
   "description": "A small, infinite carousel Web Component built with modern CSS and just a little Javascript",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/wes566/infinite-carousel-wc"
-  },
-  "author": "Wes Peter",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/wes566/infinite-carousel-wc"
-  },
-  "homepage": "https://github.com/wes566/infinite-carousel-wc",
   "keywords": [
     "web component",
     "carousel",
@@ -22,6 +12,16 @@
     "web-component",
     "custom-element"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wes566/infinite-carousel-wc"
+  },
+  "author": "wes@goulet.dev",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/wes566/infinite-carousel-wc"
+  },
+  "homepage": "https://github.com/wes566/infinite-carousel-wc",
   "module": "infinite-carousel-wc.js",
   "main": "infinite-carousel-wc.js",
   "source": "infinite-carousel-wc.js",
@@ -46,10 +46,16 @@
     "infinite-carousel-wc.min.js",
     "infinite-carousel-wc.d.ts"
   ],
+  "exports": {
+    ".": {
+      "import": "./infinite-carousel-wc.js",
+      "default": "./infinite-carousel-wc.js"
+    }
+  },
   "bundlesize": [
     {
       "path": "./infinite-carousel-wc.min.js",
-      "maxSize": "2 kB"
+      "maxSize": "2 KB"
     }
   ]
 }
